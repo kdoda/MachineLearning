@@ -1,0 +1,13 @@
+Credit Score, Income, Collateral, Should Loan
+Good,High,Good,Yes
+Good,High,Poor,Yes
+Good,Low,Good,Yes
+Good,Low,Poor,No
+Average,High,Good,Yes
+Average,Low,Poor,No
+Average,High,Poor,Yes
+Average,Low,Good,No
+Low,High,Good,Yes
+Low,High,Poor,No
+Low,Low,Good,No
+Low,Low,Poor,No
