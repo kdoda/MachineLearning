@@ -160,6 +160,7 @@ class MyMLPClassifier:
         targets[np.arange(len(outputs)), outputs.argmax(1)] = 1
         return targets
 
+#################################Iris#########################################
 iris = np.loadtxt('iris_proc.data',delimiter=',')
 iris[:,:4] = iris[:,:4]-iris[:,:4].mean(axis=0)
 imax = np.concatenate((iris.max(axis=0)*np.ones((1,5)),np.abs(iris.min(axis=0)*np.ones((1,5)))),axis=0).max(axis=0)
@@ -188,7 +189,7 @@ test = iris[3::4,0:4]
 testt = target[3::4]
 
 
-clf = MyMLPClassifier(eta=0.2,niterations=400,hiddenLayers=[5,2],outtype='logistic')
+clf = MyMLPClassifier(eta=0.2,niterations=200,hiddenLayers=[5,2],outtype='logistic')
 clf.fit(train,traint)
 my_predicted_targets = clf.predict(test)
 
@@ -201,7 +202,7 @@ clf = MLPClassifier(solver='lbfgs', alpha=1e-5,
 clf.fit(train,traint)
 builtin_predicted_targets = clf.predict(test)
 
-print(accuracy_score(my_predicted_targets,builtin_predicted_targets))
+print("Iris My accuracy: %.2f" % accuracy_score(my_predicted_targets,builtin_predicted_targets))
 
 #################################Lenses#######################################
 df = pd.read_csv("./lenses.csv", header=None)
@@ -232,3 +233,48 @@ lenses_predicted_targets = clf.predict(lenses_test_data)
 
 # Evaluate accuracy
 print("Lenses My accuracy: %.2f" % accuracy_score(lenses_test_targets, lenses_predicted_targets))
+
+##############################Voting###########################################
+headers = ["party", "handicapped", "water project cost sharing", "adoption of the budget resolution", 
+           "physician fee freeze", "el salvador aid","religious groups in schools",
+           "anti satellite test ban", "aid to nicaraguan contras", "mx missile",
+           "immigration","synfuels corporation cutback","education spending",
+           "superfund right to sue","crime","duty free exports","export administration act south africa"]
+
+df = pd.read_csv("./voting.csv",header=None, names=headers, na_values="?" )
+
+#how many rows are nulls?
+df.isnull().any(axis=1).sum()
+df = df.dropna()
+
+voting_targets_names = df.iloc[:,0]
+
+voting_targets = voting_targets_names.replace({"democrat" : 0,"republican" : 1})
+voting_targets = voting_targets.values
+df = df.drop(columns=['party'])
+
+df.replace({'n': 0,'y' : 1}, regex=True, inplace=True)
+
+# get data as numpy array
+voting_data = df.values
+
+# Split into training, validation, and test sets
+target = np.zeros((np.shape(voting_data)[0],2));
+indices = np.where(voting_targets==0) 
+target[indices,0] = 1
+indices = np.where(voting_targets==1)
+target[indices,1] = 1
+
+voting_train_data, voting_test_data, voting_train_targets, voting_test_targets = train_test_split(voting_data, target, test_size=0.3, random_state=42)
+
+# Initialize our classifier
+clf = MyMLPClassifier(eta=0.2,niterations=200,hiddenLayers=[5,2],outtype='logistic')
+
+# Train our classifier
+clf.fit(voting_train_data,voting_train_targets)
+
+# Make predictions
+voting_predicted_targets = clf.predict(voting_test_data)
+
+# Evaluate accuracy
+print("Voting My accuracy: %.2f" % accuracy_score(voting_predicted_targets, voting_test_targets))
