@@ -70,12 +70,12 @@ class MyMLPClassifier:
             # Different types of output neurons
             if self.outtype == 'linear':
                 deltao = (self.outputs-targets)/ndata
-            elif self.outtype == 'logistic':
-                deltao = self.beta*(self.outputs-targets)*self.outputs*(1.0-self.outputs)
             elif self.outtype == 'softmax':
                 deltao = (self.outputs-targets)*(self.outputs*(-self.outputs)+self.outputs)/ndata 
+            elif self.outtype == 'logistic':
+                deltao = self.beta*(self.outputs-targets)*self.outputs*(1.0-self.outputs)
             else:
-                print ("error")
+                print ("Error: outtype is not a known one")
             
         
             #last layer here since it is special
@@ -141,14 +141,14 @@ class MyMLPClassifier:
 
         # Different types of output neurons
         if self.outtype == 'linear':
-            	return outputs
-        elif self.outtype == 'logistic':
-            return 1.0/(1.0+np.exp(-self.beta*outputs))
+            return outputs
         elif self.outtype == 'softmax':
             normalisers = np.sum(np.exp(outputs),axis=1)*np.ones((1,np.shape(outputs)[0]))
             return np.transpose(np.transpose(np.exp(outputs))/normalisers)
+        elif self.outtype == 'logistic':
+            return 1.0/(1.0+np.exp(-self.beta*outputs))
         else:
-            print ("error")
+            print ("Error: outtype is not a known one")
     
     def predict(self,inputs):  
         ndata = np.shape(inputs)[0]
