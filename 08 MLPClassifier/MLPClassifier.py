@@ -26,8 +26,7 @@ class MyMLPClassifier:
         self.momentum = momentum
         self.outtype = outtype
     	 
-    def fit(self,inputs,targets):
-        """ Train the thing """    
+    def fit(self,inputs,targets):   
         
         self.nin = np.shape(inputs)[1]   # number of features (columns) of input
         self.nout = np.shape(targets)[1] # number of targets (ex iris has three targets)
