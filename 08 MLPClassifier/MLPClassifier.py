@@ -69,13 +69,13 @@ class MyMLPClassifier:
 
             # Different types of output neurons
             if self.outtype == 'linear':
-                	deltao = (self.outputs-targets)/ndata
+                deltao = (self.outputs-targets)/ndata
             elif self.outtype == 'logistic':
-                	deltao = self.beta*(self.outputs-targets)*self.outputs*(1.0-self.outputs)
+                deltao = self.beta*(self.outputs-targets)*self.outputs*(1.0-self.outputs)
             elif self.outtype == 'softmax':
                 deltao = (self.outputs-targets)*(self.outputs*(-self.outputs)+self.outputs)/ndata 
             else:
-                	print ("error")
+                print ("error")
             
         
             #last layer here since it is special
